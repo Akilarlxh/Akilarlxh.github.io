@@ -1,0 +1,26 @@
+# workflow name
+name: Auto Push
+
+# master branch on push, auto run
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - "v*"
+  #  branches:
+  #    - master
+  schedule:
+    - cron: "0 0,8,16 * * *"
+  watch:
+    types: [started]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. 检查
+        uses: actions/checkout@master
+      - name: 2. 自动提交
+        run: |
+          ls
+          curl -H 'Content-Type:text/plain' --data-binary @hexo-baidupush.txt "${{secrets.TOKEN}}"
